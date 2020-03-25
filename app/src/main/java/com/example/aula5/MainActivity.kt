@@ -16,16 +16,19 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG = MainActivity::class.java.simpleName
 
+    private val VISOR_KEY = "visor"
+
     @RequiresApi(Build.VERSION_CODES.N)
     var text = SimpleDateFormat("HH:mm:ss").format(Date())
     private val duration = Toast.LENGTH_SHORT
     var lastExpression = ""
 
-        override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.i(TAG,"o método onCreate foi invocado")
         setContentView(R.layout.activity_main)
 
-        button_clear.setOnClickListener{
+        button_ce.setOnClickListener{
                 Log.i(TAG,"Click no botão C")
                 onClickClean()
                 val toast = Toast.makeText(this, "$text button_clear", duration)
@@ -128,17 +131,16 @@ class MainActivity : AppCompatActivity() {
             toast.show()
         }
 
-        button_last.setOnClickListener {
-            onClickLast()
-            val toast = Toast.makeText(this, "$text button_last", duration)
-            toast.show()
-        }
-
     }
 
-    private fun onClickLast(){
-        Log.i(TAG,"Click no botão Ultima Conta")
-        text_visor.text = lastExpression
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        text_visor.text = savedInstanceState?.getString(VISOR_KEY)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.run { putString(VISOR_KEY, text_visor.text.toString()) }
+        super.onSaveInstanceState(outState)
+
     }
 
     private fun onClickSymbol(symbol: String){
@@ -180,10 +182,24 @@ class MainActivity : AppCompatActivity() {
         toast.show()
     }
 
-    /*fun makeToast(text:""){
-        val toast = Toast.makeText(this, text + text_visor.text, duration)
-        toast.show()
-    }*/
+    override fun onDestroy() {
+        Log.i(TAG,"o método onDestroy foi invocado")
+        super.onDestroy()
+    }
 
 
 }
+
+// dentro do onCreate
+/*
+button_last.setOnClickListener {
+            onClickLast()
+            val toast = Toast.makeText(this, "$text button_last", duration)
+            toast.show()
+        }
+*/
+
+/*private fun onClickLast(){
+        Log.i(TAG,"Click no botão Ultima Conta")
+        text_visor.text = lastExpression
+    }*/

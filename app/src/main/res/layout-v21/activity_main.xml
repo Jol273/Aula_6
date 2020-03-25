@@ -23,12 +23,12 @@
         android:requiresFadingEdge="none">
 
         <Button
-            android:id="@+id/button_clear"
+            android:id="@+id/button_ce"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
             android:background="@color/gray"
-            android:text="C"
+            android:text="CE"
             android:textColor="@color/white" />
 
         <Button
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
             android:background="@color/orange"
-            android:text='@string/multiplication'
+            android:text='*'
             android:textColor="@color/white"/>
     </LinearLayout>
 
@@ -97,7 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
             android:background="@color/orange"
-            android:text="@string/minus"
+            android:text="-"
             android:textColor="@color/white" />
 
     </LinearLayout>
