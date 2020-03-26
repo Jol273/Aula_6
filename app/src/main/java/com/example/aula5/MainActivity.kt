@@ -1,13 +1,19 @@
 package com.example.aula5
 
+import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.item_expression.view.*
 import net.objecthunter.exp4j.ExpressionBuilder
 import java.util.*
 
@@ -27,6 +33,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.i(TAG,"o método onCreate foi invocado")
         setContentView(R.layout.activity_main)
+        list_historic.adapter = HistoryAdapter(this,R.layout.item_expression, arrayListOf("1+1=2", "2+3=5"))
+
 
         button_ce.setOnClickListener{
                 Log.i(TAG,"Click no botão C")
@@ -137,8 +145,8 @@ class MainActivity : AppCompatActivity() {
         text_visor.text = savedInstanceState?.getString(VISOR_KEY)
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.run { putString(VISOR_KEY, text_visor.text.toString()) }
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.run { putString(VISOR_KEY, text_visor.text.toString()) }
         super.onSaveInstanceState(outState)
 
     }
@@ -203,3 +211,16 @@ button_last.setOnClickListener {
         Log.i(TAG,"Click no botão Ultima Conta")
         text_visor.text = lastExpression
     }*/
+
+
+class HistoryAdapter(context: Context, private val layout: Int, items: ArrayList<String>) : ArrayAdapter<String>(context, layout, items) {
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val view = convertView ?: LayoutInflater.from(context).inflate(layout,parent, false)
+        val expressionsParts = getItem(position)!!.split("=")
+        view.text_expression.text = expressionsParts[0]
+        view.text_result.text = expressionsParts[1]
+        return view
+    }
+
+}
