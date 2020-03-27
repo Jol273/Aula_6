@@ -24,12 +24,12 @@
         android:requiresFadingEdge="none">
 
 
-        <!-- forma improvisada de resolver o problema mas não é a pretendida
+        <!-- forma improvisada de resolver o problema mas não é a pretendida-->
         <ListView
             android:id="@+id/list_historic"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            />-->
+            />
 
         <Button
             android:id="@+id/button_ce"
@@ -200,7 +200,6 @@
             android:background="@color/black_dark"
             android:text="ver ultima conta"
             android:textColor="@color/white"/>
-
 
     </LinearLayout>
 

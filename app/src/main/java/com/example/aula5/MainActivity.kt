@@ -2,7 +2,6 @@ package com.example.aula5
 
 import android.content.Context
 import android.icu.text.SimpleDateFormat
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,12 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_expression.view.*
 import net.objecthunter.exp4j.ExpressionBuilder
 import java.util.*
+
+var listOfOperations = arrayListOf("1+1=2","2+3=5")
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
 
     private val VISOR_KEY = "visor"
 
-    @RequiresApi(Build.VERSION_CODES.N)
     var text = SimpleDateFormat("HH:mm:ss").format(Date())
     private val duration = Toast.LENGTH_SHORT
     var lastExpression = ""
@@ -33,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.i(TAG,"o método onCreate foi invocado")
         setContentView(R.layout.activity_main)
-        list_historic.adapter = HistoryAdapter(this,R.layout.item_expression, arrayListOf("1+1=2", "2+3=5"))
+        list_historic.adapter = HistoryAdapter(this,R.layout.item_expression, listOfOperations)
 
 
         button_ce.setOnClickListener{
@@ -48,7 +47,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         button_division.setOnClickListener{
-            Log.i(TAG, "Click no botão !")
+            Log.i(TAG, "Click no botão /")
+            onClickSymbol("/")
             val toast = Toast.makeText(this, "$text button_division", duration)
             toast.show()
             //text_visor.append("!")
@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
 
         button_multiplication.setOnClickListener {
             Log.i(TAG,"Click no botão *")
+            onClickSymbol("*")
             val toast = Toast.makeText(this, "$text button_multiplication", duration)
             toast.show()
             //text_visor.append("?")
@@ -63,6 +64,7 @@ class MainActivity : AppCompatActivity() {
 
         button_minus.setOnClickListener {
             Log.i(TAG,"Click no botão -")
+            onClickSymbol("-")
             val toast = Toast.makeText(this, "$text button_minus", duration)
             toast.show()
             //text_visor.append("#")
@@ -161,12 +163,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun onClickEquals(){
         lastExpression = text_visor.text.toString()
+
         Log.i(TAG,"Click no botão =")
         val expression = ExpressionBuilder(text_visor.text.toString()).build()
         text_visor.text = expression.evaluate().toString()
         Log.i(TAG, "O resultado da expressão é ${text_visor.text}")
         val toast = Toast.makeText(this, "$text button_equals", duration)
         toast.show()
+
+        Operation().addOperation(lastExpression, text_visor.text as String)
     }
 
     private fun onClickClean(){
@@ -217,10 +222,15 @@ class HistoryAdapter(context: Context, private val layout: Int, items: ArrayList
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView ?: LayoutInflater.from(context).inflate(layout,parent, false)
-        val expressionsParts = getItem(position)!!.split("=")
-        view.text_expression.text = expressionsParts[0]
-        view.text_result.text = expressionsParts[1]
+        val expressionsParts = getItem(position)?.split("=")
+        view.text_expression.text = expressionsParts?.get(0)
+        view.text_result.text = expressionsParts?.get(1)
         return view
     }
+}
 
+class Operation () {
+    fun addOperation(expression: String, result: String) {
+        listOfOperations.add("$expression=$result")
+    }
 }
